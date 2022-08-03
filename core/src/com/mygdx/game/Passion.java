@@ -53,29 +53,29 @@ public class Passion extends ApplicationAdapter {
 		batch.end();
 
 		if(Gdx.input.isKeyPressed(Input.Keys.W)){
-			rab.setY(rab.returnY() + ySpeed * Gdx.graphics.getDeltaTime());
+			rab.setY(rab.getY() + ySpeed * Gdx.graphics.getDeltaTime());
 			//camera.translate(0, ySpeed  * Gdx.graphics.getDeltaTime());
 			rab.updatefile("link_up.png");
 		}
 		else if(Gdx.input.isKeyPressed((Input.Keys.S))){
-			rab.setY(rab.returnY() - ySpeed * Gdx.graphics.getDeltaTime());
+			rab.setY(rab.getY() - ySpeed * Gdx.graphics.getDeltaTime());
 			//camera.translate(0, -ySpeed  * Gdx.graphics.getDeltaTime());
 			rab.updatefile("LADX_Link_Sprite.png");
 		}
 		if(Gdx.input.isKeyPressed(Input.Keys.D)){
-			rab.setX(rab.returnX() + xSpeed * Gdx.graphics.getDeltaTime());
+			rab.setX(rab.getX() + xSpeed * Gdx.graphics.getDeltaTime());
 			//camera.translate(0, ySpeed  * Gdx.graphics.getDeltaTime());
 			rab.updatefile("link_right.png");
 		}
 		else if(Gdx.input.isKeyPressed((Input.Keys.A))){
-			rab.setX(rab.returnX() - xSpeed * Gdx.graphics.getDeltaTime());
+			rab.setX(rab.getX() - xSpeed * Gdx.graphics.getDeltaTime());
 			//camera.translate(0, -ySpeed  * Gdx.graphics.getDeltaTime());
 			rab.updatefile("link_left.png");
 		}
 
-		System.out.println("(X, Y) = (" + rab.returnX() + ", " + rab.returnY()+")");
+		System.out.println("(X, Y) = (" + rab.getX() + ", " + rab.getY()+")");
 		System.out.println("1");
-		camera.position.set(rab.returnX(), rab.returnY(), 0);
+		camera.position.set(rab.getX(), rab.getY(), 0);
 
 
 
