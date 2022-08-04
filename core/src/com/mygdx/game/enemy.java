@@ -1,3 +1,4 @@
+
 package com.mygdx.game;
 
 public class enemy {
@@ -5,7 +6,7 @@ public class enemy {
     private float xLoc, yLoc, dist;
     private String img;
 
-    public Rabbit(float x, float y, String img_location, float distance){
+    public enemy(float x, float y, String img_location, float distance){
         this.xLoc = x;
         this.yLoc = y;
         this.img = img_location;

@@ -11,9 +11,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 
+import java.util.ArrayList;
+
 //import java.awt.Shape;
 
-public class Passion extends ApplicationAdapter {
+public class core extends ApplicationAdapter {
 	SpriteBatch batch;
 	Texture img, link;
 	BitmapFont font;
@@ -28,7 +30,7 @@ public class Passion extends ApplicationAdapter {
 
 	@Override
 	public void create () {
-		rab = new Rabbit(X, Y, link_sprite);
+		rab = new Rabbit(X, Y, 0, link_sprite);
 		batch = new SpriteBatch();
 		img = new Texture("badlogic.jpg");
 
@@ -46,12 +48,64 @@ public class Passion extends ApplicationAdapter {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		link = new Texture(rab.fileLoc());
 		camera.update();
-		batch.setProjectionMatrix(camera.combined);
 
-		batch.begin();
 		draw();
+		gameLogic();
+		camera.position.set(rab.getX(), rab.getY(), 0); //this camera set has to be after gamelogic to keep it smooth :^)
+
+
+
+
+	}
+
+
+	public void draw(){
+		//Sprite Batch shit
+		batch.setProjectionMatrix(camera.combined);
+		batch.begin();
+		batch.draw(link, rab.getX(), rab.getY(), 100, 100);
+		batch.draw(link, 100, 100);
 		batch.end();
 
+
+		System.out.println("(X, Y) = (" + rab.getX() + ", " + rab.getY()+")");
+		System.out.println("1");
+
+	}
+	@Override
+	public void dispose () {
+		batch.dispose();
+		img.dispose();
+		shapeRenderer.dispose();
+
+	}
+	@Override
+	public void resize(int width, int height){
+
+	}
+
+
+	public void gameLogic(){
+		ArrayList<enemy> enemyList = new ArrayList<enemy>();
+		int targetSel = 0;
+		double theta = 0;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		//Input reading
 		if(Gdx.input.isKeyPressed(Input.Keys.W)){
 			rab.setY(rab.getY() + ySpeed * Gdx.graphics.getDeltaTime());
 			//camera.translate(0, ySpeed  * Gdx.graphics.getDeltaTime());
@@ -72,27 +126,5 @@ public class Passion extends ApplicationAdapter {
 			//camera.translate(0, -ySpeed  * Gdx.graphics.getDeltaTime());
 			rab.updatefile("link_left.png");
 		}
-
-		System.out.println("(X, Y) = (" + rab.getX() + ", " + rab.getY()+")");
-		System.out.println("1");
-		camera.position.set(rab.getX(), rab.getY(), 0);
-
-
-
-	}
-	public void draw(){
-		batch.draw(link, rab.returnX(), rab.returnY(), 100, 100);
-		batch.draw(link, 100, 100);
-	}
-	@Override
-	public void dispose () {
-		batch.dispose();
-		img.dispose();
-		shapeRenderer.dispose();
-
-	}
-	@Override
-	public void resize(int width, int height){
-
 	}
 }

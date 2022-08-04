@@ -34,7 +34,7 @@ public class Rabbit {
     public void setDir(int updatedDir){
         dir = updatedDir;
     }
-    public void getDir(){
+    public int getDir(){
         return dir;
     }
 

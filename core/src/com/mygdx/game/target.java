@@ -1,14 +1,19 @@
+
 package com.mygdx.game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+
 import java.lang.Math;
 import java.util.ArrayList;
 
 public class targetting {
     ArrayList<enemy> enemyList = new ArrayList<enemy>();
     int targetSel = 0;
+    double theta = 0;
     //ArrayList<float> enemyDist = new ArrayList<float>(); //these are calculated in Java
 
     //actually would be of rabbit class ofc
-    enemy rabbit = new enemy(10, 10, "notdog.png", 0);
+    Rabbit rabbit = new Rabbit(10, 10, 0, "notdog.png");
 
     enemy e1 = new enemy(0, 0, "dog.png", 0);
     enemy e2 = new enemy(1, 0, "dog.png", 0);
@@ -37,14 +42,14 @@ public class targetting {
         int k = j-1;
         //enemy temp = enemyList.get(j);
         while((k > -1)&&(enemyList.get(k).getDist > enemyList.get(j).getDist)){
-          enemyList.get(k+1) = enemyList.get(k);
+          enemyList.set(k+1, enemyList.get(k));
           k--;
         }
         enemyList.set(k+1, enemyList.get(j));
       }
       //find angle and set direction of rabbit.
       if(Gdx.input.isKeyPressed(Input.Keys.Q)){ //this would releastically be the target button, Q is temp ofc
-  			float theta = Math.atan(((enemyList.get(targetSel).getX()-rabbit.getX())) / (enemyList.get(targetSel).getY()-rabbit.getY()));
+  			theta = Math.atan(((enemyList.get(targetSel).getX()-rabbit.getX())) / (enemyList.get(targetSel).getY()-rabbit.getY()));
   		}
       if(Gdx.input.isKeyPressed(Input.Keys.R)){ //this would releastically be the target switch, R is temp ofc
   			targetSel += 1;
@@ -53,7 +58,7 @@ public class targetting {
 
       //set Sprite Direction
       //between angles, and in Quadrant 1
-      if(theta < 60 && theta > 30 && enemyList.get(targetSel).getX() > 0 && enemyList.get(targetSel) > 0){
+      if(theta < 60 && theta > 30 && enemyList.get(targetSel).getX() > 0 && enemyList.get(targetSel).getY() > 0){
         rabbit.setDir(1);
       }
 
