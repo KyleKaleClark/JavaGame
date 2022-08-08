@@ -1,0 +1,54 @@
+animation.png
+size: 356, 64
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+link_down
+  rotate: false
+  xy: 0, 0
+  size: 52, 64
+  orig: 52, 64
+  offset: 0, 0
+  index: -1
+link_left
+  rotate: false
+  xy: 52, 0
+  size: 52, 64
+  orig: 52, 64
+  offset: 0, 0
+  index: -1
+link_left_stand
+  rotate: false
+  xy: 104, 0
+  size: 48, 64
+  orig: 48, 64
+  offset: 0, 0
+  index: -1
+link_right
+  rotate: false
+  xy: 152, 0
+  size: 52, 64
+  orig: 52, 64
+  offset: 0, 0
+  index: -1
+link_right_stand
+  rotate: false
+  xy: 204, 0
+  size: 48, 64
+  orig: 48, 64
+  offset: 0, 0
+  index: -1
+link_up
+  rotate: false
+  xy: 252, 0
+  size: 52, 64
+  orig: 52, 64
+  offset: 0, 0
+  index: -1
+Tall Sprite Size Template
+  rotate: false
+  xy: 304, 0
+  size: 52, 64
+  orig: 52, 64
+  offset: 0, 0
+  index: -1
