@@ -20,46 +20,51 @@ public class Rabbit {
         this.attack = atk;
         this.attackBonus = atkBonus;
         this.magicAttack = magicAtk;
+        this.magicAttackBonus = magicAtkBonus;
         this.speed = spd * spdBonus;
         this.speedBonus = spdBonus;
         this.animation = animationType;
     }
+    public void updatesprite(){
 
-    public float getX(){
-        return xLoc;
+      //consider implementing Maps to have File and Files Rows/Columns?
+      //also maybe consider switching to a Switch statement HUH
+        if(animation == "default"){
+          if (dir == 0){img = "link_up.png";} //North
+          else if (dir == 1){img = "link_up.png";}
+          else if (dir == 2){img = "link_right.png";} //East
+          else if (dir == 3){img = "link_right.png";}
+          else if (dir == 4){img = "link_down.png";} //South
+          else if (dir == 5){img = "link_down.png";}
+          else if (dir == 6){img = "link_left.png";} //West
+          else if (dir == 7){img = "link_left.png";}
+        }
+        else if (animation == "walking"){
+          if (dir == 0){img = "link_up.png";} //North
+          else if (dir == 1){img = "link_up.png";}
+          else if (dir == 2){img = "link_right.png";} //East
+          else if (dir == 3){img = "link_right.png";}
+          else if (dir == 4){img = "link_down.png";} //South
+          else if (dir == 5){img = "link_down.png";}
+          else if (dir == 6){img = "animation.png";} //West
+          else if (dir == 7){img = "link_left.png";}
+        }
     }
-    public void setX(float updatedx){
-        xLoc = updatedx;
-    }
-    public float getY(){
-        return yLoc;
-    }
-    public void setY(float updatedy){
-        yLoc = updatedy;
-    }
-    public String fileLoc(){
-        return img;
-    }
+    public String fileLoc(){return img;}
+
+    public float getX(){return xLoc;}
+    public void setX(float updatedx){xLoc = updatedx;}
+
+    public float getY(){return yLoc;}
+    public void setY(float updatedy){yLoc = updatedy;}
+
+
+
     public String getanimation(){return animation;}
     public void setanimation(String newanimation){animation = newanimation;}
 
-    public void updatesprite(){
-        if (dir == 0 && animation == "default"){img = "link_up.png";} //North
-        else if (dir == 1){img = "link_up.png";}
-        else if (dir == 2){img = "link_right.png";} //East
-        else if (dir == 3){img = "link_right.png";}
-        else if (dir == 4){img = "link_down.png";} //South
-        else if (dir == 5){img = "link_down.png";}
-        else if (dir == 6){img = "link_left.png";} //West
-        else if (dir == 7){img = "link_left.png";}
-        if (dir == 4 && animation == "attack"){img = "link_sword_down.png";}
-    }
-    public void setDir(int updatedDir){
-        dir = updatedDir;
-    }
-    public int getDir(){
-        return dir;
-    }
+    public void setDir(int updatedDir){dir = updatedDir;}
+    public int getDir(){return dir;}
 
     public float gethp(){return health;}
     public void sethp(float updatedhp){health = updatedhp;}
@@ -73,7 +78,17 @@ public class Rabbit {
     public float getmpbonus(){return magicPointsBonus;}
     public void setmpbonus(float updatedmpbonus){magicPointsBonus = updatedmpbonus;}
 
-    //need to do the other ones, will do it at work B)
+    public float getAtk(){return attack  * attackBonus;}
+    public void setAtk(float updatedAtk){attack = updatedAtk;}
+
+    public float getAtkBonus(){return attackBonus;}
+    public void setAtkBonus(float updatedAtkBonus){attackBonus = updatedAtkBonus;}
+
+    public float getMg(){return magicAttack * magicAttackBonus;}
+    public void setMg(float updatedMg){magicAttack = updatedMg;}
+
+    public float getMgAtkBonus(){return magicAttackBonus;}
+    public void setMgAtkBonus(float updatedMgAtkBonus){magicAttackBonus = updatedMgAtkBonus;}
 
     public float getspd(){return speed * speedBonus;}
     public void setspeed(float updatedspeed){speed = updatedspeed;}

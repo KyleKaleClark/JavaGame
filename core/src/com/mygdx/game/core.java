@@ -26,29 +26,36 @@ public class core extends ApplicationAdapter {
 	Rabbit rab;
 	Animation<TextureRegion> walk;
 	TextureRegion currentFrame;
-	Texture walkSheet;
+	Texture rabbitAnimation;
 	TextureRegion[] walkFrames;
+	hitbox rabHitbox;
 	//SpriteBatch spriteBatch;
 	float X = 200;
 	float Y = 200;
 	float xSpeed = 200;
 	float ySpeed = 200;
 	float stateTime;
+	int spriteRows = 1;
+	int spriteColumns = 2;
 	String link_sprite = "link_down.png";
+
 
 	@Override
 	public void create () {
-		rab = new Rabbit(X, Y, 4, 20, 1, 1, 1, 2, 1,
-				1, 1, 1, 1, "default");
+		rab = new Rabbit(X, Y, 4, 20, 1, 1, 1, 2, 1, 1, 1, 1, 1, "default");
+																									//height width
+		rabHitbox = new hitbox(rab.getX(), rab.getY(), 100, 50);
 		batch = new SpriteBatch();
-		walkSheet = new Texture(Gdx.files.internal("animation.png"));
 
-		TextureRegion[][] tmp = TextureRegion.split(walkSheet, walkSheet.getWidth() / 2, walkSheet.getHeight()/1);
+		//I should be switching out the animation.png depending on whats going on
+		rabbitAnimation = new Texture(Gdx.files.internal(rab.getAnimation()));
 
-		walkFrames = new TextureRegion[2];
+		TextureRegion[][] tmp = TextureRegion.split(rabbitAnimation, rabbitAnimation.getWidth() / spriteColumns, rabbitAnimation.getHeight()/spriteRows);
+
+		walkFrames = new TextureRegion[spriteColumns];
 		int index = 0;
-		for(int i = 0; i < 1; i++){
-			for(int j = 0; j < 2; j++){
+		for(int i = 0; i < spriteRows; i++){
+			for(int j = 0; j < spriteColumns; j++){
 				walkFrames[index++] = tmp[i][j];
 			}
 		}
@@ -70,9 +77,9 @@ public class core extends ApplicationAdapter {
 		stateTime += Gdx.graphics.getDeltaTime();
 		currentFrame = walk.getKeyFrame(stateTime, true);
 		camera.update();
-
-		draw();
 		gameLogic();
+		draw();
+
 		camera.position.set(rab.getX(), rab.getY(), 0); //this camera set has to be after gamelogic to keep it smooth :^)
 
 
@@ -83,6 +90,9 @@ public class core extends ApplicationAdapter {
 
 	public void draw(){
 		//Sprite Batch shit
+		rab.updatesprite();
+
+
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		batch.draw(link, rab.getX(), rab.getY());
@@ -105,7 +115,7 @@ public class core extends ApplicationAdapter {
 		enemy.dispose();
 		shapeRenderer.dispose();
 		//spriteBatch.dispose();
-		walkSheet.dispose();
+		rabbitAnimation.dispose();
 
 	}
 	@Override
@@ -116,41 +126,30 @@ public class core extends ApplicationAdapter {
 
 	public void gameLogic(){
 		ArrayList<enemy> enemyList = new ArrayList<enemy>();
-		int targetSel = 0;
-		double theta = 0;
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+		//testing collisions
+		boolean collide = rabHitbox.collision(50, 50, 50, 50);
+		if (collide){System.out.println("HIT HIT HIT");}
 
 		//Input reading
-		if(Gdx.input.isKeyPressed(Input.Keys.W)){
+		if(Gdx.input.isKeyPressed(Input.Keys.W)){ //North
 			rab.setY(rab.getY() + ySpeed * rab.getspd() * Gdx.graphics.getDeltaTime());
 			rab.setDir(0);
+			rab.setanimation("walking");
 		}
-		else if(Gdx.input.isKeyPressed((Input.Keys.S))){
+		else if(Gdx.input.isKeyPressed((Input.Keys.S))){ //South
 			rab.setY(rab.getY() - ySpeed * rab.getspd() * Gdx.graphics.getDeltaTime());
 			rab.setDir(4);
 		}
-		if(Gdx.input.isKeyPressed(Input.Keys.D)){
+		if(Gdx.input.isKeyPressed(Input.Keys.D)){ //East
 			rab.setX(rab.getX() + xSpeed * rab.getspd() * Gdx.graphics.getDeltaTime());
 			rab.setDir(2);
 		}
-		else if(Gdx.input.isKeyPressed((Input.Keys.A))){
+		else if(Gdx.input.isKeyPressed((Input.Keys.A))){ //West
 			rab.setX(rab.getX() - xSpeed * rab.getspd() * Gdx.graphics.getDeltaTime());
 			rab.setDir(6);
-			animate();
+			//animate();
 		}
 
 		rab.setanimation("default");
@@ -161,9 +160,9 @@ public class core extends ApplicationAdapter {
 		rab.setspeedBonus(1);
 		if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)){
 			rab.setspeedBonus(3);
-			System.out.println("Fuck");
+			//System.out.println("Fuck");
 		}
 
-		rab.updatesprite();
+		//rab.updatesprite(); <- Moving to draw function??
 	}
 }
