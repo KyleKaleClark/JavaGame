@@ -27,27 +27,27 @@ public class Rabbit {
     }
     public void updatesprite(){
 
-      //consider implementing Maps to have File and Files Rows/Columns?
-      //also maybe consider switching to a Switch statement HUH
+        //consider implementing Maps to have File and Files Rows/Columns?
+        //also maybe consider switching to a Switch statement HUH
         if(animation == "default"){
-          if (dir == 0){img = "link_up.png";} //North
-          else if (dir == 1){img = "link_up.png";}
-          else if (dir == 2){img = "link_right.png";} //East
-          else if (dir == 3){img = "link_right.png";}
-          else if (dir == 4){img = "link_down.png";} //South
-          else if (dir == 5){img = "link_down.png";}
-          else if (dir == 6){img = "link_left.png";} //West
-          else if (dir == 7){img = "link_left.png";}
+            if (dir == 0){img = "link_up.png";} //North
+            else if (dir == 1){img = "link_up.png";}
+            else if (dir == 2){img = "link_right.png";} //East
+            else if (dir == 3){img = "link_right.png";}
+            else if (dir == 4){img = "link_down.png";} //South
+            else if (dir == 5){img = "link_down.png";}
+            else if (dir == 6){img = "link_left.png";} //West
+            else if (dir == 7){img = "link_left.png";}
         }
         else if (animation == "walking"){
-          if (dir == 0){img = "link_up.png";} //North
-          else if (dir == 1){img = "link_up.png";}
-          else if (dir == 2){img = "link_right.png";} //East
-          else if (dir == 3){img = "link_right.png";}
-          else if (dir == 4){img = "link_down.png";} //South
-          else if (dir == 5){img = "link_down.png";}
-          else if (dir == 6){img = "animation.png";} //West
-          else if (dir == 7){img = "link_left.png";}
+            if (dir == 0){img = "rab_walk_up.png";} //North
+            else if (dir == 1){img = "rab_walk_up.png";}
+            else if (dir == 2){img = "rab_right_walk.png";} //East
+            else if (dir == 3){img = "rab_right_walk.png";}
+            else if (dir == 4){img = "rab_walk_down.png";} //South
+            else if (dir == 5){img = "rab_walk_down.png";}
+            else if (dir == 6){img = "rab_left_walk.png";} //West
+            else if (dir == 7){img = "rab_left_walk.png";}
         }
     }
     public String fileLoc(){return img;}

@@ -43,23 +43,13 @@ public class core extends ApplicationAdapter {
 	@Override
 	public void create () {
 		rab = new Rabbit(X, Y, 4, 20, 1, 1, 1, 2, 1, 1, 1, 1, 1, "default");
-																									//height width
-		rabHitbox = new hitbox(rab.getX(), rab.getY(), 100, 50);
+		//height width
+
 		batch = new SpriteBatch();
 
 		//I should be switching out the animation.png depending on whats going on
-		rabbitAnimation = new Texture(Gdx.files.internal(rab.getAnimation()));
+		System.out.println("Here?");
 
-		TextureRegion[][] tmp = TextureRegion.split(rabbitAnimation, rabbitAnimation.getWidth() / spriteColumns, rabbitAnimation.getHeight()/spriteRows);
-
-		walkFrames = new TextureRegion[spriteColumns];
-		int index = 0;
-		for(int i = 0; i < spriteRows; i++){
-			for(int j = 0; j < spriteColumns; j++){
-				walkFrames[index++] = tmp[i][j];
-			}
-		}
-		walk = new Animation<TextureRegion>(0.25f, walkFrames);
 		font = new BitmapFont();
 		shapeRenderer = new ShapeRenderer();
 
@@ -72,17 +62,36 @@ public class core extends ApplicationAdapter {
 		ScreenUtils.clear(1, 0, 0, 1);
 		Gdx.gl.glClearColor(.25f, .25f, .25f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+		rabbitAnimation = new Texture(rab.fileLoc());
+
+		TextureRegion[][] tmp = TextureRegion.split(rabbitAnimation, rabbitAnimation.getWidth() / spriteColumns, rabbitAnimation.getHeight()/spriteRows);
+
+		walkFrames = new TextureRegion[spriteColumns];
+		int index = 0;
+		for(int i = 0; i < spriteRows; i++){
+			for(int j = 0; j < spriteColumns; j++){
+				walkFrames[index++] = tmp[i][j];
+			}
+		}
+		walk = new Animation<TextureRegion>(0.25f, walkFrames);
+
 		link = new Texture(rab.fileLoc());
+
 		enemy = new Texture("enemy.png");
 		stateTime += Gdx.graphics.getDeltaTime();
 		currentFrame = walk.getKeyFrame(stateTime, true);
 		camera.update();
-		gameLogic();
-		draw();
 
+		draw();
+		gameLogic();
 		camera.position.set(rab.getX(), rab.getY(), 0); //this camera set has to be after gamelogic to keep it smooth :^)
 
 
+		//setting these up for garbage collection so i'm not burning memory
+		link.dispose(); enemy.dispose(); rabbitAnimation.dispose();
+		walk = null; link = null; enemy = null; walkFrames = null; rabbitAnimation = null;
+		System.gc();
 
 
 	}
@@ -90,15 +99,15 @@ public class core extends ApplicationAdapter {
 
 	public void draw(){
 		//Sprite Batch shit
-		rab.updatesprite();
+
 
 
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
-		batch.draw(link, rab.getX(), rab.getY());
+		batch.draw(currentFrame, rab.getX(), rab.getY());
 		batch.draw(enemy, 50, 50);
 		batch.end();
-
+		rab.updatesprite();
 
 		//System.out.println("(X, Y) = (" + rab.getX() + ", " + rab.getY()+")");
 		//System.out.println("1");
@@ -126,29 +135,35 @@ public class core extends ApplicationAdapter {
 
 	public void gameLogic(){
 		ArrayList<enemy> enemyList = new ArrayList<enemy>();
-
+		rabHitbox = new hitbox(rab.getX(), rab.getY(), 100, 50);
 
 		//testing collisions
 		boolean collide = rabHitbox.collision(50, 50, 50, 50);
-		if (collide){System.out.println("HIT HIT HIT");}
+		//if (collide){System.out.println("HIT HIT HIT");}
 
 		//Input reading
 		if(Gdx.input.isKeyPressed(Input.Keys.W)){ //North
 			rab.setY(rab.getY() + ySpeed * rab.getspd() * Gdx.graphics.getDeltaTime());
 			rab.setDir(0);
-			rab.setanimation("walking");
+			walkAnimation();
 		}
 		else if(Gdx.input.isKeyPressed((Input.Keys.S))){ //South
 			rab.setY(rab.getY() - ySpeed * rab.getspd() * Gdx.graphics.getDeltaTime());
 			rab.setDir(4);
+			walkAnimation();
 		}
 		if(Gdx.input.isKeyPressed(Input.Keys.D)){ //East
 			rab.setX(rab.getX() + xSpeed * rab.getspd() * Gdx.graphics.getDeltaTime());
 			rab.setDir(2);
+			walkAnimation();
 		}
 		else if(Gdx.input.isKeyPressed((Input.Keys.A))){ //West
 			rab.setX(rab.getX() - xSpeed * rab.getspd() * Gdx.graphics.getDeltaTime());
 			rab.setDir(6);
+			walkAnimation();
+			System.out.println(rab.getanimation());
+			System.out.println(rab.getDir());
+			System.out.println(rab.fileLoc());
 			//animate();
 		}
 
@@ -163,6 +178,14 @@ public class core extends ApplicationAdapter {
 			//System.out.println("Fuck");
 		}
 
-		//rab.updatesprite(); <- Moving to draw function??
+		//rab.updatesprite(); //<- Moving to draw function??
+
+		//easy quit
+		if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
+			Gdx.app.exit();
+	}
+	public void walkAnimation(){
+		rab.setanimation("walking");
+		rab.updatesprite();
 	}
 }
