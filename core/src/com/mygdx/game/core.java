@@ -35,9 +35,12 @@ public class core extends ApplicationAdapter {
 	float xSpeed = 200;
 	float ySpeed = 200;
 	float stateTime;
-	int spriteRows = 1;
-	int spriteColumns = 2;
+	int rabbitSpriteRows = 1;
+	int rabbitSpriteColumns = 2;
 	String link_sprite = "link_down.png";
+
+	//Game values
+	int keys = 0;
 
 
 	@Override
@@ -55,6 +58,10 @@ public class core extends ApplicationAdapter {
 
 		camera = new OrthographicCamera(480, 320);
 
+		//creating 1 key, can be optimized with arrays and file reading
+		hitbox key1hitbx = new hitbox(100, 100, 50, 50);
+		keys key1 =  new keys(100, 100, "enemy.png", key1hitbx);
+
 	}
 
 	@Override
@@ -63,32 +70,35 @@ public class core extends ApplicationAdapter {
 		Gdx.gl.glClearColor(.25f, .25f, .25f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+
+
+		//Animation Work
 		rabbitAnimation = new Texture(rab.fileLoc());
-
-		TextureRegion[][] tmp = TextureRegion.split(rabbitAnimation, rabbitAnimation.getWidth() / spriteColumns, rabbitAnimation.getHeight()/spriteRows);
-
-		walkFrames = new TextureRegion[spriteColumns];
+		TextureRegion[][] tmp = TextureRegion.split(rabbitAnimation, rabbitAnimation.getWidth() / rabbitSpriteColumns, rabbitAnimation.getHeight()/rabbitSpriteRows);
+		walkFrames = new TextureRegion[rabbitSpriteColumns];
 		int index = 0;
-		for(int i = 0; i < spriteRows; i++){
-			for(int j = 0; j < spriteColumns; j++){
+		for(int i = 0; i < rabbitSpriteRows; i++){
+			for(int j = 0; j < rabbitSpriteColumns; j++){
 				walkFrames[index++] = tmp[i][j];
 			}
 		}
 		walk = new Animation<TextureRegion>(0.25f, walkFrames);
-
 		link = new Texture(rab.fileLoc());
-
 		enemy = new Texture("enemy.png");
 		stateTime += Gdx.graphics.getDeltaTime();
 		currentFrame = walk.getKeyFrame(stateTime, true);
-		camera.update();
 
+		//In-game classes
+
+
+		//Game Logic/Actual Display
+		camera.update();
 		draw();
 		gameLogic();
 		camera.position.set(rab.getX(), rab.getY(), 0); //this camera set has to be after gamelogic to keep it smooth :^)
 
 
-		//setting these up for garbage collection so i'm not burning memory
+		//try moving these down to public void dispose()
 		link.dispose(); enemy.dispose(); rabbitAnimation.dispose();
 		walk = null; link = null; enemy = null; walkFrames = null; rabbitAnimation = null;
 		System.gc();
@@ -99,13 +109,16 @@ public class core extends ApplicationAdapter {
 
 	public void draw(){
 		//Sprite Batch shit
-
+		if(rab.getanimation=="walking"){rabbitSpriteRows = 1; rabbitSpriteColumns = 2;}
+		else if (rab.getanimation=="default"){rabbitSpriteRows = 1; rabbitSpriteColumns = 1;}
 
 
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		batch.draw(currentFrame, rab.getX(), rab.getY());
 		batch.draw(enemy, 50, 50);
+		batch.draw(key1.getfile(), key1.getHitBox().getX(), key1.getHitBox().getY();)
+		font.draw(batch, "KEYS" + keys, 10, 10);
 		batch.end();
 		rab.updatesprite();
 
@@ -139,7 +152,10 @@ public class core extends ApplicationAdapter {
 
 		//testing collisions
 		boolean collide = rabHitbox.collision(50, 50, 50, 50);
+		boolean getKey = key1.getHitbox().collision(rab.getX(), rab.getY(), 50, 50);
+		if (getKey){key1.setHitbox(null); key1.setImg(""); keys++;}
 		//if (collide){System.out.println("HIT HIT HIT");}
+
 
 		//Input reading
 		if(Gdx.input.isKeyPressed(Input.Keys.W)){ //North

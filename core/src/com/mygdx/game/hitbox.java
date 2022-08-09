@@ -32,13 +32,13 @@ public class hitbox {
     public float getWidth(){
         return hitboxWidth;
     }
-    public void setWidth(float updatedWidth){
+    public float setWidth(float updatedWidth){
         hitboxWidth = updatedWidth;
     }
     public float getHeight(){
         return hitboxHeight;
     }
-    public void setHeight(float updatedHeight){
+    public float setHeight(float updatedHeight){
         hitboxHeight = updatedHeight;
     }
 }
