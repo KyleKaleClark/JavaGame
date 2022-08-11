@@ -1,11 +1,14 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.graphics.Texture;
+
 public class Rabbit {
 
     private float xLoc, yLoc, health, healthBonus, magicPoints, magicPointsBonus, attack, attackBonus, magicAttack, magicAttackBonus;
     private float speed, speedBonus;
     private int dir;
     private String img, animation;
+    Texture rabbitTexture;
 
     public Rabbit(float x, float y, int direction, float hp, float hpBonus, float mp, float mpBonus, float atk,
                   float atkBonus, float magicAtk, float magicAtkBonus, float spd, float spdBonus, String animationType){
@@ -26,18 +29,18 @@ public class Rabbit {
         this.animation = animationType;
     }
     public void updatesprite(){
-
+        //rabbitTexture.dispose();
         //consider implementing Maps to have File and Files Rows/Columns?
         //also maybe consider switching to a Switch statement HUH
         if(animation == "default"){
-            if (dir == 0){img = "link_up.png";} //North
-            else if (dir == 1){img = "link_up.png";}
-            else if (dir == 2){img = "link_right.png";} //East
-            else if (dir == 3){img = "link_right.png";}
-            else if (dir == 4){img = "link_down.png";} //South
-            else if (dir == 5){img = "link_down.png";}
-            else if (dir == 6){img = "link_left.png";} //West
-            else if (dir == 7){img = "link_left.png";}
+            if (dir == 0){img = "rab_stand_up.png";} //North
+            else if (dir == 1){img = "rab_stand_up.png";}
+            else if (dir == 2){img = "rab_stand_right.png";} //East
+            else if (dir == 3){img = "rab_stand_right.png";}
+            else if (dir == 4){img = "rab_stand.png";} //South
+            else if (dir == 5){img = "rab_stand.png";}
+            else if (dir == 6){img = "rab_stand_left.png";} //West
+            else if (dir == 7){img = "rab_stand_left.png";}
         }
         else if (animation == "walking"){
             if (dir == 0){img = "rab_walk_up.png";} //North
@@ -49,6 +52,14 @@ public class Rabbit {
             else if (dir == 6){img = "rab_left_walk.png";} //West
             else if (dir == 7){img = "rab_left_walk.png";}
         }
+        rabbitTexture = new Texture(img);
+    }
+    public Texture getRabbitTexture(){
+        return rabbitTexture;
+    }
+    public void dispose(){
+        rabbitTexture = null;
+        System.gc();
     }
     public String fileLoc(){return img;}
 
@@ -95,5 +106,6 @@ public class Rabbit {
 
     public float getspdbonus(){return speedBonus;}
     public void setspeedBonus(float updatedspeedBonus){speedBonus = updatedspeedBonus;}
+
 
 }

@@ -1,17 +1,22 @@
 
 package com.mygdx.game;
 
+import com.badlogic.gdx.graphics.Texture;
+
 public class enemy {
 
     private float xLoc, yLoc, dist;
     private String img;
+    Texture enemyTexture;
 
-    public enemy(float x, float y, String img_location, float distance){
+    public enemy(float x, float y, String img_location){
         this.xLoc = x;
         this.yLoc = y;
         this.img = img_location;
-        this.dist = distance;
+        this.enemyTexture = new Texture(img);
+        //this.dist = distance;
     }
+
 
     public float getX(){
         return xLoc;
@@ -36,5 +41,16 @@ public class enemy {
     }
     public void setDist(float updatedDist){
       dist = updatedDist;
+    }
+
+    public void draw(){
+
+    }
+    public Texture getEnemyTexture(){
+        return enemyTexture;
+    }
+    public void dispose(){
+        enemyTexture = null;
+        System.gc();
     }
 }
