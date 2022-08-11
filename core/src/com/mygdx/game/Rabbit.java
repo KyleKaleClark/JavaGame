@@ -8,14 +8,22 @@ public class Rabbit {
     private float speed, speedBonus;
     private int dir;
     private String img, animation;
-    Texture rabbitTexture;
+    public Texture rabbitTexture;
+    public SpriteBatch batch;
+    public TextureRegion[] regions;
+    public Animation<TextureRegion> animation;
+    //All Sprite file locations
+    String[] walkingSprites = {"rab_stand_up.png", "rab_stand_up.png",
+            "rab_stand_right.png", "rab_stand_right.png",
+            "rab_stand.png", "rab_stand.png",
+            "rab_stand_left.png", "rab_stand_left.png"};
 
     public Rabbit(float x, float y, int direction, float hp, float hpBonus, float mp, float mpBonus, float atk,
                   float atkBonus, float magicAtk, float magicAtkBonus, float spd, float spdBonus, String animationType){
         this.xLoc = x;
         this.yLoc = y;
         this.dir = direction;
-        this.img = "link_up.png";
+        this.img = "rab_stand.png";
         this.health = hp;
         this.healthBonus = hpBonus;
         this.magicPoints = mp;
@@ -27,12 +35,21 @@ public class Rabbit {
         this.speed = spd * spdBonus;
         this.speedBonus = spdBonus;
         this.animation = animationType;
+        batch = new SpriteBatch();
+        regions = TextureRegion(rabbitTexture, rabbitTexture.getWidth()/2, rabbitTexture.getHeight());
+        animation = new Animation<>(0.25f, regions);
+    }
+    public void draw(float elapse){
+        batch.begin();
+        batch.draw(animation.getKeyFrame(elapse, `loop` : true), xLoc, yLoc, 25, 25);
+        batch.end();
     }
     public void updatesprite(){
         //rabbitTexture.dispose();
         //consider implementing Maps to have File and Files Rows/Columns?
         //also maybe consider switching to a Switch statement HUH
         if(animation == "default"){
+            /*
             if (dir == 0){img = "rab_stand_up.png";} //North
             else if (dir == 1){img = "rab_stand_up.png";}
             else if (dir == 2){img = "rab_stand_right.png";} //East
@@ -41,6 +58,9 @@ public class Rabbit {
             else if (dir == 5){img = "rab_stand.png";}
             else if (dir == 6){img = "rab_stand_left.png";} //West
             else if (dir == 7){img = "rab_stand_left.png";}
+            */
+            img = walkingSprites[dir];//should be faster way to implement ^^
+
         }
         else if (animation == "walking"){
             if (dir == 0){img = "rab_walk_up.png";} //North
@@ -72,7 +92,7 @@ public class Rabbit {
 
 
     public String getanimation(){return animation;}
-    public void setanimation(String newanimation){animation = newanimation;}
+    public void setanimation(String newanimation){animation = newanimation; updatesprite();}
 
     public void setDir(int updatedDir){dir = updatedDir;}
     public int getDir(){return dir;}

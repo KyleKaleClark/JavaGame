@@ -1,7 +1,6 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
@@ -18,22 +17,21 @@ import java.util.ArrayList;
 
 
 
-public class core extends Game {
+public class core extends Game{
     SpriteBatch batch;
     Texture enemy, link;
     BitmapFont font;
-    OrthographicCamera camera;
+    Orthographic camera;
     Rabbit rab;
     Animation<TextureRegion> walk;
-
-    int X = 200;
-    int Y = 200;
+    float elapse;
 
     @Override
     public void create(){
         batch = new SpriteBatch();
         font = new BitmapFont();
-        rab = new Rabbit(X, Y, 4, 20, 1, 1, 1, 2, 1, 1, 1, 1, 1, "default");
+        rab = new Rabbit(X, Y, 4, 20, 1, 1, 1, 2, 1, 1, 1, 200, 1, "default");
+        elapse = 0f;
         setScreen(new TitleScreen(this));
     }
 
