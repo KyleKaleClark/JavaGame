@@ -1,3 +1,4 @@
+/*
 package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
@@ -205,4 +206,7 @@ public class core extends ApplicationAdapter {
 		rab.setanimation("walking");
 		rab.updatesprite();
 	}
+
+
 }
+*/

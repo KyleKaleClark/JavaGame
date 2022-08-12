@@ -1,4 +1,4 @@
-
+/*
 package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
@@ -213,3 +213,4 @@ public class core_ extends ApplicationAdapter {
 		rab.updatesprite();
 	}
 }
+*/

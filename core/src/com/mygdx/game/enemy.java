@@ -1,43 +1,62 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import sun.awt.AWTThreading;
 
 public class enemy {
 
     private float xLoc, yLoc, dist;
     private String img;
     public Texture enemyTexture;
-    public SpriteBatch batch;
     public TextureRegion[] regions;
     public Animation<TextureRegion> animation;
     public Random rand = new Random();
     private int n;
+    private int elapse;
     public enemy(float x, float y, String img_location){
         this.xLoc = x;
         this.yLoc = y;
         this.img = img_location;
         this.enemyTexture = new Texture(img);
         //this.dist = distance;
-        batch = new SpriteBatch();
-        regions = TextureRegion(enemyTexture, enemyTexture.getWidth()/1, enemyTexture.getHeight());
+        elapse = 0;
+        n = rand.nextInt(8);
+        regions = TextureRegion.split(enemyTexture, enemyTexture.getWidth()/1, enemyTexture.getHeight())[0];
         animation = new Animation<>(0.25f, regions);
     }
-    public void draw(float elapse){
+    public void draw(SpriteBatch batch, float elapse){
         batch.begin();
-        batch.draw(animation.getKeyFrame(elapse, `loop` : true), xLoc, yLoc, 25, 25);
+        batch.draw(animation.getKeyFrame(elapse, true), xLoc, yLoc, 150, 100);
         batch.end();
     }
 
-    public void move(float elapse){
+    public void move(){
         //babys first AI
-        if (elapse%60==0){ //every 60 frames
-            n = rand.nextInt(8);
-            if(n==0){yLoc += 20;}
-            else if(n==2){xLoc += 20;}
-            else if(n==4){yLoc -= 20;}
-            else if (n==6){xLoc -=20;}
+        elapse += 1;
+
+        if ((int)elapse<=120){ //every 60 frames
+            if(n==0){yLoc++;}
+            else if(n==1){yLoc++; xLoc++;}
+            else if(n==2){xLoc++;}
+            else if(n==3){xLoc++; yLoc--;}
+            else if(n==4){yLoc--;}
+            else if(n==5){yLoc--; xLoc--;}
+            else if (n==6){xLoc--;}
         }
+        System.out.println("System Time: " + elapse);
+        if(elapse >= 240){elapse = 0;
+            n = rand.nextInt(9); //9 because 8 directions + 1 inaction state
+        }
+
     }
 
     public float getX(){

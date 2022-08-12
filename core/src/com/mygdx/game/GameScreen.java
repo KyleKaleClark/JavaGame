@@ -29,12 +29,13 @@ public class GameScreen extends ScreenAdapter {
     core core;
     ArrayList<enemy> enemies = new ArrayList<enemy>();
     level1 lvl1 = new level1();
-
+    OrthographicCamera camera;
     //Texture enemyTexture = enemyTexture = new Texture("");
     public GameScreen(core core){
         this.core = core;
         enemies = lvl1.getEnemyArray();
         core.rab.updatesprite();
+        camera = new OrthographicCamera(480, 320);
 
     }
 
@@ -47,30 +48,6 @@ public class GameScreen extends ScreenAdapter {
             if (keyCode == Input.Keys.ENTER){
                 core.setScreen(new TitleScreen(core));
 
-            }
-            if(keyCode==Input.Keys.W){
-                //core.rab.updatesprite(); <- I threw this into setAnimation. If that doesn't work we can do it manually.
-                core.rab.setY(core.rab.getY() + core.rab.getspd() * Gdx.graphics.getDeltaTime());
-                core.rab.setDir(0);
-                core.rab.setanimation("walking");
-            }
-            else if(keyCode==Input.Keys.S){
-                //core.rab.updatesprite(); <- I threw this into setAnimation. If that doesn't work we can do it manually.
-                core.rab.setY(core.rab.getY() - core.rab.getspd() * Gdx.graphics.getDeltaTime());
-                core.rab.setDir(4);
-                core.rab.setanimation("walking");
-            }
-            if(keyCode==Input.Keys.D){
-                //core.rab.updatesprite(); <- I threw this into setAnimation. If that doesn't work we can do it manually.
-                core.rab.setY(core.rab.getX() + core.rab.getspd() * Gdx.graphics.getDeltaTime());
-                core.rab.setDir(2);
-                core.rab.setanimation("walking");
-            }
-            else if(keyCode==Input.Keys.A){
-                //core.rab.updatesprite(); <- I threw this into setAnimation. If that doesn't work we can do it manually.
-                core.rab.setY(core.rab.getX() - core.rab.getspd() * Gdx.graphics.getDeltaTime());
-                core.rab.setDir(6);
-                core.rab.setanimation("walking");
             }
             return true;
         }
@@ -86,22 +63,67 @@ public class GameScreen extends ScreenAdapter {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         core.elapse += Gdx.graphics.getDeltaTime();
 
-        core.batch.begin();
+        checkInputs();
+
+
+
+
+        //System.out.println(core.camera.toString());
+
+
         //should draw all the enemies declared in level1;
         for(int i=0; i<enemies.size(); i++){
             //core.batch.draw(enemies.get(i).getEnemyTexture(), enemies.get(i).getX(), enemies.get(i).getY());
-            enemies.get(i).draw(core.elapse);
-            //enemies.get(i).setX(enemies.get(i).getX() + 10);
-            enemies.get(i).move(core.elapse); //babys first AI
+            enemies.get(i).draw(core.batch, core.elapse);
+            enemies.get(i).move(); //babys first AI
         }
         //enemies.clear();
         //core.batch.draw(core.rab.getRabbitTexture(), core.rab.getX(), core.rab.getY());
+        core.batch.begin();
         core.batch.end();
-        core.rab.draw(core.elapse);
+        core.rab.draw(core. batch, core.elapse);
 
+
+        //System.out.println(core.camera.position.toString());
         // I want to see how this increments, so i can Modulus it
         //to determine enemy movement every x frames.
-        System.out.println("System Time: " + core.elapse);
+        //System.out.println("Animation state: " + core.rab.getanimation() + ", Direction: " + core.rab.getDir());
+    }
+
+    public void checkInputs(){
+        core.rab.setanimation("default");
+        if(Gdx.input.isKeyPressed(Input.Keys.W)){ //North
+            core.rab.updatesprite();
+            core.rab.setY(core.rab.getY() + core.rab.getspd() * Gdx.graphics.getDeltaTime());
+            core.rab.setDir(0);
+            core.rab.setanimation("walking");
+        }
+        else if(Gdx.input.isKeyPressed(Input.Keys.S)){ //South
+            core.rab.updatesprite();
+            core.rab.setY(core.rab.getY() - core.rab.getspd() * Gdx.graphics.getDeltaTime());
+            core.rab.setDir(4);
+            core.rab.setanimation("walking");
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.D)){ //East
+            core.rab.updatesprite();
+            //System.out.println("FUCK");
+            core.rab.setX(core.rab.getX() + core.rab.getspd() * Gdx.graphics.getDeltaTime());
+            core.rab.setDir(2);
+            core.rab.setanimation("walking");
+        }
+        else if(Gdx.input.isKeyPressed(Input.Keys.A)){ //West
+            core.rab.updatesprite();
+            core.rab.setX(core.rab.getX() - core.rab.getspd() * Gdx.graphics.getDeltaTime());
+            core.rab.setDir(6);
+            core.rab.setanimation("walking");
+        }
+        core.rab.setspeedBonus(1);
+        if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)){
+            core.rab.setspeedBonus(3);
+            //System.out.println("Fuck");
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
+            Gdx.app.exit();
     }
 
     @Override

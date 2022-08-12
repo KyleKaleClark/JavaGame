@@ -1,3 +1,4 @@
+/*
 package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
@@ -42,3 +43,4 @@ public class core extends Game{
 
 
 }
+*/

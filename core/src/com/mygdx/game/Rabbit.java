@@ -1,6 +1,11 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Rabbit {
 
@@ -9,21 +14,26 @@ public class Rabbit {
     private int dir;
     private String img, animation;
     public Texture rabbitTexture;
-    public SpriteBatch batch;
     public TextureRegion[] regions;
-    public Animation<TextureRegion> animation;
-    //All Sprite file locations
-    String[] walkingSprites = {"rab_stand_up.png", "rab_stand_up.png",
-            "rab_stand_right.png", "rab_stand_right.png",
-            "rab_stand.png", "rab_stand.png",
-            "rab_stand_left.png", "rab_stand_left.png"};
+    public Animation<TextureRegion> animatonAnimation;
+    int textureDivWidth, textureDivHeight;
+    float frameDivider;
+
+    Texture[] walkingSprites = {new Texture("rab_walk_up.png"), new Texture("rab_walk_up.png"),
+            new Texture("rab_right_walk.png"), new Texture("rab_right_walk.png"),
+            new Texture("rab_walk_down.png"), new Texture("rab_walk_down.png"),
+            new Texture("rab_left_walk.png"), new Texture("rab_left_walk.png")};
+    Texture[] standingSprites = {new Texture("rab_stand_up1.png"), new Texture("rab_stand_up1.png"),
+            new Texture("link_right_stand.png"), new Texture("link_right_stand.png"),
+            new Texture("rab_stand1.png"), new Texture("rab_stand1.png"),
+            new Texture("link_left_stand.png"), new Texture("link_left_stand.png")};
 
     public Rabbit(float x, float y, int direction, float hp, float hpBonus, float mp, float mpBonus, float atk,
                   float atkBonus, float magicAtk, float magicAtkBonus, float spd, float spdBonus, String animationType){
         this.xLoc = x;
         this.yLoc = y;
         this.dir = direction;
-        this.img = "rab_stand.png";
+        this.img = "rab_walk_down.png";
         this.health = hp;
         this.healthBonus = hpBonus;
         this.magicPoints = mp;
@@ -35,48 +45,35 @@ public class Rabbit {
         this.speed = spd * spdBonus;
         this.speedBonus = spdBonus;
         this.animation = animationType;
-        batch = new SpriteBatch();
-        regions = TextureRegion(rabbitTexture, rabbitTexture.getWidth()/2, rabbitTexture.getHeight());
-        animation = new Animation<>(0.25f, regions);
+        rabbitTexture = new Texture(img);
+        regions = TextureRegion.split(rabbitTexture, rabbitTexture.getWidth()/2, rabbitTexture.getHeight())[0];
+        animatonAnimation = new Animation<>(frameDivider, regions);
+        textureDivWidth = 2;
+        textureDivHeight = 1;
+        frameDivider = 0.25f;
     }
-    public void draw(float elapse){
+    public void draw(SpriteBatch batch, float elapse){
         batch.begin();
-        batch.draw(animation.getKeyFrame(elapse, `loop` : true), xLoc, yLoc, 25, 25);
+        batch.draw(animatonAnimation.getKeyFrame(elapse, true), xLoc, yLoc, 100, 100);
         batch.end();
     }
     public void updatesprite(){
-        //rabbitTexture.dispose();
-        //consider implementing Maps to have File and Files Rows/Columns?
-        //also maybe consider switching to a Switch statement HUH
         if(animation == "default"){
-            /*
-            if (dir == 0){img = "rab_stand_up.png";} //North
-            else if (dir == 1){img = "rab_stand_up.png";}
-            else if (dir == 2){img = "rab_stand_right.png";} //East
-            else if (dir == 3){img = "rab_stand_right.png";}
-            else if (dir == 4){img = "rab_stand.png";} //South
-            else if (dir == 5){img = "rab_stand.png";}
-            else if (dir == 6){img = "rab_stand_left.png";} //West
-            else if (dir == 7){img = "rab_stand_left.png";}
-            */
-            img = walkingSprites[dir];//should be faster way to implement ^^
-
+            textureDivWidth = 1; textureDivHeight = 1;
+            rabbitTexture = standingSprites[dir];
         }
         else if (animation == "walking"){
-            if (dir == 0){img = "rab_walk_up.png";} //North
-            else if (dir == 1){img = "rab_walk_up.png";}
-            else if (dir == 2){img = "rab_right_walk.png";} //East
-            else if (dir == 3){img = "rab_right_walk.png";}
-            else if (dir == 4){img = "rab_walk_down.png";} //South
-            else if (dir == 5){img = "rab_walk_down.png";}
-            else if (dir == 6){img = "rab_left_walk.png";} //West
-            else if (dir == 7){img = "rab_left_walk.png";}
+            textureDivWidth = 2; textureDivHeight = 1;
+            rabbitTexture = walkingSprites[dir];//should be faster way to implement ^^
         }
-        rabbitTexture = new Texture(img);
+        regions = TextureRegion.split(rabbitTexture, rabbitTexture.getWidth()/textureDivWidth, rabbitTexture.getHeight()/textureDivHeight)[0];
+        animatonAnimation = new Animation<>(frameDivider, regions);
+        //System.out.println("rabbitTexture" + rabbitTexture.toString());
     }
     public Texture getRabbitTexture(){
         return rabbitTexture;
     }
+
     public void dispose(){
         rabbitTexture = null;
         System.gc();
@@ -126,6 +123,7 @@ public class Rabbit {
 
     public float getspdbonus(){return speedBonus;}
     public void setspeedBonus(float updatedspeedBonus){speedBonus = updatedspeedBonus;}
+
 
 
 }
