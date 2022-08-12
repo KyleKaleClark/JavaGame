@@ -64,7 +64,7 @@ public class GameScreen extends ScreenAdapter {
         core.elapse += Gdx.graphics.getDeltaTime();
 
         checkInputs();
-
+        checkCollisions();
 
 
 
@@ -90,6 +90,22 @@ public class GameScreen extends ScreenAdapter {
         //System.out.println("Animation state: " + core.rab.getanimation() + ", Direction: " + core.rab.getDir());
     }
 
+
+    //Check checkCollisions
+    public void checkCollisions(){
+        for(int i=0; i <enemies.size(); i++){
+            if(core.getCollision(
+            enemy.get(i).getHitbox[0], enemy.get(i).getHitbox[1], enemy.get(i).getHitbox[2],enemy.get(i).getHitbox[3],
+            core.rab.getHitbox[0], core.rab.getHitbox[1], core.rab.getHitbox[2], core.rab.getHitbox[3]))
+            {
+                enemy.get(i).dipose();
+            }
+        }
+    }
+
+//------------------------------------------------------------------------------------------------
+
+    //Check Inputs
     public void checkInputs(){
         core.rab.setanimation("default");
         if(Gdx.input.isKeyPressed(Input.Keys.W)){ //North

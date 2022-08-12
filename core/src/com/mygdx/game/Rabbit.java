@@ -86,7 +86,11 @@ public class Rabbit {
     public float getY(){return yLoc;}
     public void setY(float updatedy){yLoc = updatedy;}
 
-
+    public float getWidth(){return rabbitTexture.getWidth();}
+    public float getHeight(){return rabbitTexture.getHeight();}
+    public float[] getHitbox(){
+        return new float[] {xLoc, yLoc, getWidth(), getHeight()};
+    }
 
     public String getanimation(){return animation;}
     public void setanimation(String newanimation){animation = newanimation; updatesprite();}

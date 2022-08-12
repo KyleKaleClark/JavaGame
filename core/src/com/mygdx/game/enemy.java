@@ -59,6 +59,12 @@ public class enemy {
 
     }
 
+    public float getWidth(){return rabbitTexture.getWidth();}
+    public float getHeight(){return rabbitTexture.getHeight();}
+    public float[] getHitbox(){
+        return new float[] {xLoc, yLoc, getWidth(), getHeight()};
+    }
+
     public float getX(){
         return xLoc;
     }
