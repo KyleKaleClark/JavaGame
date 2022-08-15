@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-public class Rabbit implements Drawable{
+public class Frog implements Drawable{
 
     private float xLoc, yLoc, health, healthBonus, magicPoints, magicPointsBonus, attack, attackBonus, magicAttack, magicAttackBonus;
     private float speed, speedBonus;
@@ -34,7 +34,7 @@ public class Rabbit implements Drawable{
 
 
 
-    public Rabbit(float x, float y, int direction, float hp, float hpBonus, float mp, float mpBonus, float atk,
+    public Frog(float x, float y, int direction, float hp, float hpBonus, float mp, float mpBonus, float atk,
                   float atkBonus, float magicAtk, float magicAtkBonus, float spd, float spdBonus, String animationType){
         this.xLoc = x;
         this.yLoc = y;

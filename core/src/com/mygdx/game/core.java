@@ -24,6 +24,7 @@ public class core extends Game {
     BitmapFont font;
     OrthographicCamera camera;
     Rabbit rab;
+    Frog frog;
     Animation<TextureRegion> walk;
     float elapse;
 
@@ -32,6 +33,7 @@ public class core extends Game {
         batch = new SpriteBatch();
         font = new BitmapFont();
         rab = new Rabbit(100, 100, 4, 20, 1, 1, 1, 2, 1, 1, 1, 200, 1, "default");
+        frog = new Frog(100, 100, 4, 20, 1, 1, 1, 2, 1, 1, 1, 200, 1, "default");
         elapse = 0f;
         //camera = new OrthographicCamera(480, 320);
         //camera.update();
