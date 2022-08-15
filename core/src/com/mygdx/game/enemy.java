@@ -12,7 +12,7 @@ import java.util.TimerTask;
 
 import sun.awt.AWTThreading;
 
-public class enemy {
+public class enemy implements Drawable{
 
     private float xLoc, yLoc, dist;
     private String img;
@@ -22,6 +22,8 @@ public class enemy {
     public Random rand = new Random();
     private int n;
     private int elapse;
+    private float width;
+    private float height;
     public enemy(float x, float y, String img_location){
         this.xLoc = x;
         this.yLoc = y;
@@ -32,10 +34,12 @@ public class enemy {
         n = rand.nextInt(8);
         regions = TextureRegion.split(enemyTexture, enemyTexture.getWidth()/1, enemyTexture.getHeight())[0];
         animation = new Animation<>(0.25f, regions);
+        width = 150;
+        height = 100;
     }
     public void draw(SpriteBatch batch, float elapse){
         batch.begin();
-        batch.draw(animation.getKeyFrame(elapse, true), xLoc, yLoc, 150, 100);
+        batch.draw(animation.getKeyFrame(elapse, true), xLoc, yLoc, width, height);
         batch.end();
     }
 
@@ -52,15 +56,15 @@ public class enemy {
             else if(n==5){yLoc--; xLoc--;}
             else if (n==6){xLoc--;}
         }
-        System.out.println("System Time: " + elapse);
+        //System.out.println("System Time: " + elapse);
         if(elapse >= 240){elapse = 0;
             n = rand.nextInt(9); //9 because 8 directions + 1 inaction state
         }
 
     }
 
-    public float getWidth(){return rabbitTexture.getWidth();}
-    public float getHeight(){return rabbitTexture.getHeight();}
+    public float getWidth(){return width;}
+    public float getHeight(){return height-40;}
     public float[] getHitbox(){
         return new float[] {xLoc, yLoc, getWidth(), getHeight()};
     }
