@@ -1,28 +1,14 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-/*
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-*/
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -30,8 +16,9 @@ import java.util.Comparator;
 public class GameScreen extends ScreenAdapter {
     core core;
     ArrayList<enemy> enemies = new ArrayList<enemy>();
-    Drawable[] control = {core.rab, core.frog};
-    float[] movement = new float[8];
+    //Drawable[] control = {core.rab, core.frog};
+    ArrayList<Drawable> control = new ArrayList<Drawable>();
+    float[][] historicalCoordinates = new float[20][2];
     level1 lvl1 = new level1();
     OrthographicCamera camera;
     ShapeRenderer shapeRenderer;
@@ -44,9 +31,18 @@ public class GameScreen extends ScreenAdapter {
         core.frog.updatesprite();
         camera = new OrthographicCamera(480, 320);
         drawingList = new ArrayList<Drawable>();
+        control.add(core.rab);
+        control.add(core.frog);
         //this is only here to visualize hitboxes
         shapeRenderer = new ShapeRenderer();
-
+        historicalCoordinates = new float[][]{
+                {core.rab.getX(), core.rab.getY()}, {core.rab.getX(), core.rab.getY()}, {core.rab.getX(), core.rab.getY()},
+                {core.rab.getX(), core.rab.getY()}, {core.rab.getX(), core.rab.getY()}, {core.rab.getX(), core.rab.getY()},
+                {core.rab.getX(), core.rab.getY()}, {core.rab.getX(), core.rab.getY()}, {core.rab.getX(), core.rab.getY()},
+                {core.rab.getX(), core.rab.getY()},  {core.rab.getX(), core.rab.getY()}, {core.rab.getX(), core.rab.getY()}, {core.rab.getX(), core.rab.getY()},
+                {core.rab.getX(), core.rab.getY()}, {core.rab.getX(), core.rab.getY()}, {core.rab.getX(), core.rab.getY()},
+                {core.rab.getX(), core.rab.getY()}, {core.rab.getX(), core.rab.getY()}, {core.rab.getX(), core.rab.getY()},
+                {core.rab.getX(), core.rab.getY()}};
 
     }
 
@@ -60,7 +56,13 @@ public class GameScreen extends ScreenAdapter {
                 core.setScreen(new TitleScreen(core));
 
             }
-            if(keyCode == Inputs.Keys.SHIFT_RIGHT){
+            if(keyCode == Input.Keys.SHIFT_RIGHT){
+                float tempx = control.get(0).getX();
+                float tempy = control.get(0).getY();
+                control.get(0).setX(control.get(1).getX());
+                control.get(0).setY(control.get(1).getY());
+                control.get(1).setX(tempx);
+                control.get(1).setY(tempy);
                 Collections.reverse(control);
             }
             return true;
@@ -119,22 +121,25 @@ public class GameScreen extends ScreenAdapter {
     public void checkCollisions(){
         float[][] bounceback = {
             //X                                 Y
-            {core.rab.getX(), movement[core.rab.getDir()] * -1}, //N
-            {movement[core.rab.getDir()] * -1, movement[core.rab.getDir()] * -1},
-            {movement[core.rab.getDir()] * -1, core.rab.getY()}, //E
-            {movement[core.rab.getDir()] * -1, movement[core.rab.getDir()] * -1},
-            {core.rab.getX(), movement[core.rab.getDir()] * -1}, //S
-            {movement[core.rab.getDir()] * -1, movement[core.rab.getDir()] * -1},
-            {movement[core.rab.getDir()] * -1, core.rab.getY()}, //W
-            {movement[core.rab.getDir()] * -1, movement[core.rab.getDir()] * -1}
-        }
-
-        if(core.getCollision(
-        enemies.get(i).getHitbox()[0], enemies.get(i).getHitbox()[1], enemies.get(i).getHitbox()[2],enemies.get(i).getHitbox()[3],
-        core.rab.getHitbox()[0], core.rab.getHitbox()[1], core.rab.getHitbox()[2], core.rab.getHitbox()[3])){
-            core.rab.setX(bounceback[core.rab.getDir()][0]);
-            core.rab.setY(bounceback[core.rab.getDir()][1]);
-            core.rab.sethp(core.rab.gethp() - 1);
+            {core.rab.getX(), core.rab.getY()-50}, //N
+            {core.rab.getX()-50, core.rab.getY()-50},
+            {core.rab.getX()-50, core.rab.getY()}, //E
+            {core.rab.getX()-50, core.rab.getY()+50},
+            {core.rab.getX(),  core.rab.getY()+50}, //S
+            {core.rab.getX()+50,  core.rab.getY()+50},
+            {core.rab.getX()+50, core.rab.getY()}, //W
+            {core.rab.getX()+50, core.rab.getY()-50}
+        };
+        for(int i=0; i <enemies.size(); i++) {
+            if (core.getCollision(
+                    enemies.get(i).getHitbox()[0], enemies.get(i).getHitbox()[1], enemies.get(i).getHitbox()[2], enemies.get(i).getHitbox()[3],
+                    core.rab.getHitbox()[0], core.rab.getHitbox()[1], core.rab.getHitbox()[2], core.rab.getHitbox()[3])) {
+                core.rab.setX(bounceback[core.rab.getDir()][0]);
+                core.rab.setY(bounceback[core.rab.getDir()][1]);
+                System.out.println("X pushback:" + bounceback[core.rab.getDir()][0]);
+                System.out.println("Y pushback:" + bounceback[core.rab.getDir()][1]);
+                core.rab.sethp(core.rab.gethp() - 1);
+            }
         }
 
     }
@@ -144,8 +149,9 @@ public class GameScreen extends ScreenAdapter {
         for(int i=0; i<enemies.size(); i++){
             drawingList.add(enemies.get(i));
         }
-        drawingList.add(core.rab);
         drawingList.add(core.frog);
+        drawingList.add(core.rab);
+
 
         //Sort from farthest to closest
         Collections.sort(drawingList, new Comparator<Drawable>() {
@@ -161,8 +167,8 @@ public class GameScreen extends ScreenAdapter {
         }
         //Hud drawing
         core.batch.begin();
-        core.font.draw(core.batch, "Rabbit Health: " + (int)core.rab.gethp, 10, 10);
-        core.font.draw(core.batch, "Frog Health:" + (int)core.frog.gethp, 10, 60);
+        core.font.draw(core.batch, "Rabbit Health: " + (int)core.rab.gethp(), 10, 900);
+        core.font.draw(core.batch, "Frog Health:" + (int)core.frog.gethp(), 10, 850);
         core.batch.end();
 
         //clear so you dont draw over stuff
@@ -194,70 +200,88 @@ public class GameScreen extends ScreenAdapter {
 
     */
     public void checkInputs(){
-        movement[] = {core.rab.getY() + core.rab.getspd() * Gdx.graphics.getDeltaTime(),
-            core.rab.getY() + core.rab.getspd() * Gdx.graphics.getDeltaTime(),
-            core.rab.getX() + core.rab.getspd() * Gdx.graphics.getDeltaTime(),
-            core.rab.getX() + core.rab.getspd() * Gdx.graphics.getDeltaTime(),
-            core.rab.getY() - core.rab.getspd() * Gdx.graphics.getDeltaTime(),
-            core.rab.getY() - core.rab.getspd() * Gdx.graphics.getDeltaTime(),
-            core.rab.getY() - core.rab.getspd() * Gdx.graphics.getDeltaTime(),
-            core.rab.getY() - core.rab.getspd() * Gdx.graphics.getDeltaTime()}
 
 
-        core.rab.setanimation("default");
-        if(Gdx.input.isKeyPressed(Input.Keys.W)){ //North
-            //Update Frog first because it'll use the Rabbits info from last frame.
+        core.rab.setanimation("default"); core.frog.setanimation("default");
+        if(Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.S) ||
+        Gdx.input.isKeyPressed(Input.Keys.D)){
+
+
+            System.out.println(core.elapse);
+            //System.out.println("Begin Array --------------------------------");
+            if((int)core.elapse>=0) {
+                for (int i = 0; i < historicalCoordinates.length - 1; i++) {
+                    historicalCoordinates[i][0] = historicalCoordinates[i + 1][0];
+                    historicalCoordinates[i][1] = historicalCoordinates[i + 1][1];
+                    //System.out.println(historicalCoordinates[i][0] + ", " + historicalCoordinates[i][1]);
+                }
+                //System.out.println("End Array --------------------------------");
+                historicalCoordinates[historicalCoordinates.length - 1][0] = control.get(0).getX();
+                historicalCoordinates[historicalCoordinates.length - 1][1] = control.get(0).getY();
+            }
+
+            control.get(1).setY(historicalCoordinates[0][1]);
+            control.get(1).setX(historicalCoordinates[0][0]);
+
+
+            control.get(1).setDir(control.get(0).getDir());
+
             core.frog.updatesprite();
-            core.frog.setY(core.rab.getY());
-            core.frog.setX(core.rab.getX());
-            core.frog.setDir(core.rab.getDir());
-            core.frog.setanimation("walking");
-
             core.rab.updatesprite();
-            //core.rab.setY(core.rab.getY() + core.rab.getspd() * Gdx.graphics.getDeltaTime());
-            core.rab.setY(movement[core.rab.getDir()]);
-            core.rab.setDir(0);
             core.rab.setanimation("walking");
-        }
-        else if(Gdx.input.isKeyPressed(Input.Keys.S)){ //South
-            core.frog.updatesprite();
-            core.frog.setY(core.rab.getY());
-            core.frog.setX(core.rab.getX());
-            core.frog.setDir(core.rab.getDir());
             core.frog.setanimation("walking");
+            if (Gdx.input.isKeyPressed(Input.Keys.W)) { //North
+                //Update Frog first because it'll use the Rabbits info from last frame.
 
-            core.rab.updatesprite();
-            //core.rab.setY(core.rab.getY() - core.rab.getspd() * Gdx.graphics.getDeltaTime());
-            core.rab.setY(movement[core.rab.getDir()]);
-            core.rab.setDir(4);
-            core.rab.setanimation("walking");
-        }
-        if(Gdx.input.isKeyPressed(Input.Keys.D)){ //East
-            core.frog.updatesprite();
-            core.frog.setY(core.rab.getY());
-            core.frog.setX(core.rab.getX());
-            core.frog.setDir(core.rab.getDir());
-            core.frog.setanimation("walking");
 
-            core.rab.updatesprite();
-            //core.rab.setX(core.rab.getX() + core.rab.getspd() * Gdx.graphics.getDeltaTime());
-            core.rab.setY(movement[core.rab.getDir()]);
-            core.rab.setDir(2);
-            core.rab.setanimation("walking");
-        }
-        else if(Gdx.input.isKeyPressed(Input.Keys.A)){ //West
-            core.frog.updatesprite();
-            core.frog.setY(core.rab.getY());
-            core.frog.setX(core.rab.getX());
-            core.frog.setDir(core.rab.getDir());
-            core.frog.setanimation("walking");
 
-            core.rab.updatesprite();
-            //core.rab.setX(core.rab.getX() - core.rab.getspd() * Gdx.graphics.getDeltaTime());
-            core.rab.setY(movement[core.rab.getDir()]);
-            core.rab.setDir(6);
-            core.rab.setanimation("walking");
+
+
+                control.get(0).setY(control.get(0).getY() + control.get(0).getspd() * Gdx.graphics.getDeltaTime());
+                //core.rab.setY(movement[core.rab.getDir()]);
+                control.get(0).setDir(0);
+
+            } else if (Gdx.input.isKeyPressed(Input.Keys.S)) { //South
+                //core.frog.updatesprite();
+                //core.frog.setY(core.rab.getY());
+                //core.frog.setX(core.rab.getX());
+
+                //core.frog.setanimation("walking");
+
+                //core.rab.updatesprite();
+                control.get(0).setY(control.get(0).getY() - control.get(0).getspd() * Gdx.graphics.getDeltaTime());
+                //core.rab.setY(movement[core.rab.getDir()]);
+                control.get(0).setDir(4);
+                //core.rab.setanimation("walking");
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.D)) { //East
+                //core.frog.updatesprite();
+                //core.frog.setY(core.rab.getY());
+                //core.frog.setX(core.rab.getX());
+                //core.frog.setDir(core.rab.getDir());
+                //core.frog.setanimation("walking");
+
+                //core.rab.updatesprite();
+                control.get(0).setX(control.get(0).getX() + control.get(0).getspd() * Gdx.graphics.getDeltaTime());
+                //core.rab.setY(movement[core.rab.getDir()]);
+                control.get(0).setDir(2);
+                //core.rab.setanimation("walking");
+            } else if (Gdx.input.isKeyPressed(Input.Keys.A)) { //West
+                //core.frog.updatesprite();
+                //core.frog.setY(core.rab.getY());
+                //core.frog.setX(core.rab.getX());
+               // core.frog.setDir(core.rab.getDir());
+                //core.frog.setanimation("walking");
+
+                //core.rab.updatesprite();
+                control.get(0).setX(control.get(0).getX() - control.get(0).getspd() * Gdx.graphics.getDeltaTime());
+                //core.rab.setY(movement[core.rab.getDir()]);
+                control.get(0).setDir(6);
+                //core.rab.setanimation("walking");
+            }
         }
+
+
         core.rab.setspeedBonus(1);
         if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)){
             core.rab.setspeedBonus(3);
@@ -266,14 +290,14 @@ public class GameScreen extends ScreenAdapter {
             Gdx.app.exit();
 
 
-        if(Gdx.input.isKeyJustPressed(Input.Keys.K) || core.rab.inAnimation()){
+        if((Gdx.input.isKeyJustPressed(Input.Keys.K) || core.rab.inAnimation()) && control.get(0).getClass() == core.rab.getClass()){
             float[] rabHitbox = core.rab.getSwordHitbox();
             checkAttack(rabHitbox);
             if(!core.rab.inAnimation()){core.rab.setElapse(0);}
         }
 
         //empty it
-        movement = null;
+        //movement = null;
     }
 
 

@@ -1,0 +1,32 @@
+[
+  {
+    "x": 0,
+    "y": 0,
+    "image": "LADX_Link_Sprite"
+  },
+  {
+      "x": 50,
+      "y": 0,
+      "image": "LADX_Link_Sprite"
+  },
+  {
+    "x": 100,
+    "y": 0,
+    "image": "LADX_Link_Sprite"
+  },
+  {
+    "x": 150,
+    "y": 0,
+    "image": "LADX_Link_Sprite"
+  },
+  {
+    "x": 200,
+    "y": 0,
+    "image": "LADX_Link_Sprite"
+  },
+  {
+    "x": 0,
+    "y": 50,
+    "image": "LADX_Link_Sprite"
+  }
+]

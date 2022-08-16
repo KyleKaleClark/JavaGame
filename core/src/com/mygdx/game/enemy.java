@@ -43,6 +43,113 @@ public class enemy implements Drawable{
         batch.end();
     }
 
+    public void updatesprite(){}
+    public void setDir(int updatedDir){}
+    public int getDir(){return 0;}
+    public float gethp(){return 0;}
+    public void sethp(float updated){}
+    public float gethpbonus(){return 0;}
+
+    @Override
+    public void sethpbonus(float updatedhpbonus) {
+
+    }
+
+    @Override
+    public float getmp() {
+        return 0;
+    }
+
+    @Override
+    public void setmp(float updatedmp) {
+
+    }
+
+    @Override
+    public float getmpbonus() {
+        return 0;
+    }
+
+    @Override
+    public void setmpbonus(float updatedmpbonus) {
+
+    }
+
+    @Override
+    public float getAtk() {
+        return 0;
+    }
+
+    @Override
+    public void setAtk(float updatedAtk) {
+
+    }
+
+    @Override
+    public float getAtkBonus() {
+        return 0;
+    }
+
+    @Override
+    public void setAtkBonus(float updatedAtkBonus) {
+
+    }
+
+    @Override
+    public float getMg() {
+        return 0;
+    }
+
+    @Override
+    public void setMg(float updatedMg) {
+
+    }
+
+    @Override
+    public float getMgAtkBonus() {
+        return 0;
+    }
+
+    @Override
+    public void setMgAtkBonus(float updatedMgAtkBonus) {
+
+    }
+
+    @Override
+    public float getspd() {
+        return 0;
+    }
+
+    @Override
+    public void setspeed(float updatedspeed) {
+
+    }
+
+    @Override
+    public float getspdbonus() {
+        return 0;
+    }
+
+    @Override
+    public void setspeedBonus(float updatedspeedBonus) {
+
+    }
+
+    @Override
+    public boolean inAnimation() {
+        return false;
+    }
+
+    @Override
+    public void setInAnimation(boolean updatedAnim) {
+
+    }
+
+    @Override
+    public void setElapse(int updatedElapse) {
+
+    }
+
     public void move(){
         //babys first AI
         elapse += 1;

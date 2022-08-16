@@ -23,14 +23,14 @@ public class Frog implements Drawable{
     int elapse;
     boolean inAnimation;
 
-    Texture[] walkingSprites = {new Texture("rab_walk_up.png"), new Texture("rab_walk_up.png"),
-            new Texture("rab_right_walk.png"), new Texture("rab_right_walk.png"),
-            new Texture("rab_walk_down.png"), new Texture("rab_walk_down.png"),
-            new Texture("rab_left_walk.png"), new Texture("rab_left_walk.png")};
-    Texture[] standingSprites = {new Texture("rab_stand_up1.png"), new Texture("rab_stand_up1.png"),
-            new Texture("link_right_stand.png"), new Texture("link_right_stand.png"),
-            new Texture("rab_stand1.png"), new Texture("rab_stand1.png"),
-            new Texture("link_left_stand.png"), new Texture("link_left_stand.png")};
+    Texture[] walkingSprites = {new Texture("frog_walk_up.png"), new Texture("frog_walk_up.png"),
+            new Texture("frog_walk_right.png"), new Texture("frog_walk_right.png"),
+            new Texture("frog_walk_down.png"), new Texture("frog_walk_down.png"),
+            new Texture("frog_walk_left.png"), new Texture("frog_walk_left.png")};
+    Texture[] standingSprites = {new Texture("frog_stand_up.png"), new Texture("frog_stand_up.png"),
+            new Texture("frog_stand_right.png"), new Texture("frog_stand_right.png"),
+            new Texture("frog_stand_down.png"), new Texture("frog_stand_down.png"),
+            new Texture("frog_stand_left.png"), new Texture("frog_stand_left.png")};
 
 
 
